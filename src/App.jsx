@@ -4,12 +4,16 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from './presentation/themes/theme';
 import Routes from './utils/routes';
 import './App.less';
-import './i18n';
+import { SelectedProjectProvider, ProjectsProvider } from './utils/Context';
 
 export default function App() {
     return (
         <ThemeProvider theme={theme}>
-            <Routes />
+            <ProjectsProvider>
+                <SelectedProjectProvider>
+                    <Routes />
+                </SelectedProjectProvider>
+            </ProjectsProvider>
         </ThemeProvider>
     );
 }

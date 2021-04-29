@@ -7,9 +7,9 @@ const { Content } = Layout;
 
 export default styled(Content)`
     background: ${({ theme }) => theme.layoutStyles.contentColor};
-    margin-top: ${({ theme }) => theme.layoutStyles.headerHeight};
-    min-height: ${({ theme }) => theme.layoutStyles.contentHeight};
-    min-height: 100vh;
+    padding-top: ${({ theme, userRole }) => (userRole === 'customer' ? theme.layoutStyles.customerHeaderHeight : theme.layoutStyles.headerHeight)};
+    min-height: ${({ theme, userRole }) => (userRole === 'customer' ? '100vh' : theme.layoutStyles.contentHeight)};
+    height: ${({ userRole }) => userRole === 'customer' && '100vh'};
     &::-webkit-scrollbar {
         overflow: hidden;
     }

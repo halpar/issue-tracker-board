@@ -1,15 +1,20 @@
+/* eslint-disable sonarjs/no-identical-functions */
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Menu, Avatar, Badge } from 'antd';
 import { MenuOutlined, HomeOutlined, BellOutlined, QuestionCircleOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import useResponsive from '../../../../utils/Hooks/useMediaQuery';
-import { GuestHeader, CustomerHeader, CustomerLeftSection, CustomerRightSection } from './styles';
+import { GuestHeader, CustomerHeader, CustomerLeftSection, CustomerRightSection, SearchInput, SearchbarContainer } from './styles';
 import MainLogo from '../../../../assets/common/header/todoist-main-logo.png';
 import { Text } from '../../Typography/styles';
+import { setSidebarCollapseState } from '../../../../utils/Redux/collapsed/actions';
 
 const Header = ({ userRole }) => {
     const { xs, sm, md } = useResponsive();
     const history = useHistory();
+    const dispatch = useDispatch();
+    const isCollapsed = useSelector((state) => state.sidebarStateStore.isCollapsed);
 
     const onClickLogo = () => {
         history.push('/');
@@ -33,7 +38,34 @@ const Header = ({ userRole }) => {
         },
     ];
 
-    return userRole === '' ? (
+    const handleMenuCollapse = () => {
+        dispatch(setSidebarCollapseState(!isCollapsed));
+    };
+
+    return userRole === 'customer' ? (
+        <CustomerHeader>
+            <Row align="middle" justify="space-between" style={{ height: '100%' }}>
+                <CustomerLeftSection>
+                    <Row align="middle" justify="center">
+                        <MenuOutlined onClick={() => handleMenuCollapse()} className="header-icon-styling" />
+                        <HomeOutlined className="header-icon-styling icon-margin-left" />
+                        <SearchbarContainer className="icon-margin-left" style={{ height: '44px' }}>
+                            <SearchInput placeholder="Search here" />
+                        </SearchbarContainer>
+                    </Row>
+                </CustomerLeftSection>
+                <CustomerRightSection>
+                    <Row align="middle" justify="center">
+                        <QuestionCircleOutlined className="header-icon-styling icon-margin-left" />
+                        <BellOutlined className="header-icon-styling icon-margin-left" />
+                        <Badge dot>
+                            <Avatar className="icon-margin-left" icon={<UserOutlined />} />
+                        </Badge>
+                    </Row>
+                </CustomerRightSection>
+            </Row>
+        </CustomerHeader>
+    ) : (
         <GuestHeader>
             <Row style={{ height: '100%' }} align="middle" justify="space-between">
                 <Col span={6} onClick={() => onClickLogo()}>
@@ -67,25 +99,6 @@ const Header = ({ userRole }) => {
                 </Col>
             </Row>
         </GuestHeader>
-    ) : (
-        <CustomerHeader>
-            <Row style={{ height: '100%' }} align="middle" justify="space-between">
-                <CustomerLeftSection span={6}>
-                    <Row>
-                        <MenuOutlined />
-                        <HomeOutlined />
-                    </Row>
-                </CustomerLeftSection>
-                <CustomerRightSection span={6}>
-                    <PlusOutlined />
-                    <QuestionCircleOutlined />
-                    <BellOutlined />
-                    <Badge dot>
-                        <Avatar icon={<UserOutlined />} />
-                    </Badge>
-                </CustomerRightSection>
-            </Row>
-        </CustomerHeader>
     );
 };
 

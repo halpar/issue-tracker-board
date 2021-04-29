@@ -1,8 +1,10 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import { between } from 'polished';
-import { Row, Col } from 'antd';
+import { Row, Col, Input } from 'antd';
 
 import Layout from '../index';
+
+// const { Search } = Input;
 
 const { Header } = Layout;
 
@@ -51,11 +53,52 @@ export const GlobalStyleForTooltip = createGlobalStyle`
 `;
 
 export const CustomerHeader = styled(Header)`
+    width: 100%;
     z-index: 200;
-    background-color: #db4c3f;
-    padding-left: 42px;
-    padding-right: 42px;
+    position: fixed;
+    background-color: ${({ theme }) => theme.layoutStyles.customerHeaderColor};
+    height: ${({ theme }) => theme.layoutStyles.customerHeaderHeight} !important;
+    padding-left: ${({ theme }) => theme.layoutStyles.customerHeaderPaddingHorizontal};
+    padding-right: ${({ theme }) => theme.layoutStyles.customerHeaderPaddingHorizontal};
+
+    .header-icon-styling {
+        font-size: 24px;
+        color: #ffffff;
+    }
+    .icon-margin-left {
+        margin-left: 12px;
+    }
 `;
 
 export const CustomerLeftSection = styled(Col)``;
 export const CustomerRightSection = styled(Col)``;
+export const SearchbarContainer = styled(Col)`
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    width: 400px;
+`;
+export const SearchInput = styled(Input.Search)`
+    width: 185px;
+    border-radius: 90%;
+    opacity: 0.6;
+    transition: 0.1s ease-in;
+    background: transparent;
+
+    ::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: ${({ theme }) => theme.placeholderColor};
+        opacity: 1; /* Firefox */
+    }
+    &:hover {
+        opacity: 1;
+        text-align: start;
+        width: 100%;
+        @media only screen and (min-width: 1250px) {
+            width: 100%;
+        }
+
+        border: ${({ theme }) => `1px solid ${theme.primaryColor}`};
+    }
+`;

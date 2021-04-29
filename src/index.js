@@ -2,24 +2,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ConfigProvider } from 'antd';
-import { I18nextProvider } from 'react-i18next';
 import moment from 'moment';
 import enGB from 'antd/lib/locale-provider/en_GB';
 import 'moment/locale/en-gb';
 import { Provider } from 'react-redux';
 import App from './App';
-import i18n from './i18n';
-
 import reportWebVitals from './reportWebVitals';
+import store from './utils/Redux/store';
 
 moment.locale('en-gb'); // sets first day of the week to monday
 
 ReactDOM.render(
     <React.StrictMode>
         <ConfigProvider locale={enGB}>
-            <I18nextProvider i18n={i18n}>
+            <Provider store={store}>
                 <App />
-            </I18nextProvider>
+            </Provider>
         </ConfigProvider>
     </React.StrictMode>,
     document.getElementById('root')

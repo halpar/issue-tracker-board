@@ -16,7 +16,7 @@ export const theme = {
     contentBackgroundColor: '#F7FCF9',
     contentSecondaryBackground: '#CFCFCF',
 
-    borderColor: '#BCBCBC',
+    borderColor: '#ddd',
     borderSecondaryColor: '#DDD',
     borderTertiaryColor: '#559670',
     borderQuaternaryColor: '#B7B7B7',
@@ -25,14 +25,18 @@ export const theme = {
     layoutStyles: {
         headerColor: '#FFFFFF',
         contentColor: '#FFFFFF',
-        footerColor: '#ffffff',
+        footerColor: '#FFFFFF',
+        siderColor: '#FFFFFF',
         footerColorDark: '#F0EEE5',
+        customerHeaderColor: '#db4c3f',
 
         headerHeight: '90px',
+        customerHeaderHeight: '44px',
         footerHeight: '410px',
         contentHeight: '100vh',
 
         headerPaddingVertical: '18px',
+        customerHeaderPaddingHorizontal: '42px',
         paddingHorizontal: '120px',
         paddingTop: '45px',
     },

@@ -1,0 +1,2 @@
+export const SET_SIDEBAR_COLLAPSE_STATE = 'SET_SIDEBAR_COLLAPSE_STATE';
+export const RESET = 'RESET';
