@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-identical-functions */
 /* eslint-disable sonarjs/no-duplicate-string */
 import React, { useEffect, useState } from 'react';
 import { Radio, Col, Row, DatePicker, Input, Form } from 'antd';
@@ -21,12 +20,12 @@ import ProjectDetailsPageStyles, {
 } from './styles';
 import { Text } from '../../../components/Typography/styles';
 import Button from '../../../components/Button';
+import Tasks from './Tasks';
 import { firebase } from '../../../../firebase';
 
 const ProjectDetailsPage = () => {
     const { Option } = CustomSelectbar;
     const [form] = Form.useForm();
-
     let projectName = '';
     const { selectedProject } = useSelectedProjectValue();
     const { projects } = useProjectsValue();
@@ -36,6 +35,8 @@ const ProjectDetailsPage = () => {
     const isUpcoming = window.location.pathname.includes('upcoming');
     const isInbox = window.location.pathname.includes('inbox');
     const isToday = window.location.pathname.includes('today');
+
+    const userInfo = JSON.parse(localStorage.getItem('authUser'));
 
     if (collatedTasksExist(selectedProject) && selectedProject) {
         projectName = getCollatedTitle(collatedTasks, selectedProject).name;
@@ -61,7 +62,6 @@ const ProjectDetailsPage = () => {
         let projectId = selectedProject;
 
         if (selectBoxprojectId) {
-            console.log('yo123');
             projectId = selectBoxprojectId;
         }
 
@@ -76,7 +76,7 @@ const ProjectDetailsPage = () => {
                     projectId,
                     task: taskNameFromInput,
                     date: taskDate,
-                    userId: 'V3pZBCaVi8YBvIlXR4zB',
+                    userId: userInfo.user.uid,
                 })
                 .then(() => {
                     handleCancelTask();
@@ -99,17 +99,7 @@ const ProjectDetailsPage = () => {
             </TitleWrapper>
             <TasksWrapper>
                 <Col span={24}>
-                    {isInbox
-                        ? archivedTasks.map((task) => (
-                              <RadioWrapper style={{ marginBottom: '12px' }}>
-                                  <Radio key={task.id}>{task.task}</Radio>
-                              </RadioWrapper>
-                          ))
-                        : tasks.map((task) => (
-                              <RadioWrapper style={{ marginBottom: '12px' }}>
-                                  <Radio key={task.id}>{task.task}</Radio>
-                              </RadioWrapper>
-                          ))}
+                    <Tasks archivedTasks={archivedTasks} tasks={tasks} />
                     {showAddTask && (
                         <AddTaskSection>
                             <Col span={24}>

@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { withRouter, useHistory } from 'react-router-dom';
 import { message, Row } from 'antd';
 import Provider from '../../../../components/AuthProvider';
+import { FirebaseContext } from '../../../../../utils/Context';
 
 import LoginCardStyles, {
     Title,
@@ -20,12 +21,25 @@ import LoginCardStyles, {
 // import LoginCardStyles from '../../../Chefs/LoginPage/LoginCard/styles';
 import whiteArrow from '../../../../../assets/common/login/white-arrow.svg';
 
-const LoginCard = ({ setShowEmailLogin, showEmailLogin, history }) => {
+const LoginCard = ({ setShowEmailLogin, showEmailLogin }) => {
+    const { firebase } = useContext(FirebaseContext);
+    const history = useHistory();
     const [subscribe, setSubscribe] = useState(true);
-    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [showErrorMessage] = useState(false);
 
     const handleLogin = (vals) => {
         const { email, password } = vals;
+
+        firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password)
+            .then((userInfo) => {
+                localStorage.setItem('authUser', JSON.stringify(userInfo));
+                history.push('/customer');
+            })
+            .catch((error) => {
+                message.error(error.message);
+            });
     };
 
     return (
@@ -42,7 +56,7 @@ const LoginCard = ({ setShowEmailLogin, showEmailLogin, history }) => {
                 </SignupButton>
             </Content>
             {showEmailLogin ? (
-                <Form onFinish={handleLogin}>
+                <Form onFinish={(values) => handleLogin(values)}>
                     <Form.Item name="email" rules={[{ required: true, message: 'Please enter your e-mail.' }]}>
                         <EmailInput placeholder="E-mail" type="email" />
                     </Form.Item>
@@ -63,7 +77,7 @@ const LoginCard = ({ setShowEmailLogin, showEmailLogin, history }) => {
                     </ContinueButton>
                 </Form>
             ) : (
-                <Form onFinish={handleLogin}>
+                <Form onFinish={(values) => handleLogin(values)}>
                     <Form.Item rules={[{ required: true, message: 'LPlease enter your phone number.' }]}>
                         <Input type="tel" placeholder="Phone number" />
                     </Form.Item>

@@ -7,20 +7,25 @@ import { Text } from '../../../components/Typography/styles';
 
 const LandingPage = () => {
     const history = useHistory();
+    const isCustomer = window.location.pathname.includes('customer');
     return (
         <LandingPageStyles backgroundIMG={BackgroundIMG}>
-            <MottoWrapper align="middle" justify="center">
-                <Text style={{ textAlign: 'center', lineHeight: '90px' }} weight="bold" size="76px" color="dark-black">
-                    Organize it all with Todoist
-                </Text>
-            </MottoWrapper>
-            <Row style={{ marginTop: '24px' }} align="middle" justify="center">
-                <Col span={4}>
-                    <CustomBtn onClick={() => history.push('/login')} type="secondary">
-                        Get Started
-                    </CustomBtn>
-                </Col>
-            </Row>
+            {!isCustomer && (
+                <>
+                    <MottoWrapper align="middle" justify="center">
+                        <Text style={{ textAlign: 'center', lineHeight: '90px' }} weight="bold" size="76px" color="dark-black">
+                            Organize it all with Todoist
+                        </Text>
+                    </MottoWrapper>
+                    <Row style={{ marginTop: '24px' }} align="middle" justify="center">
+                        <Col span={4}>
+                            <CustomBtn onClick={() => history.push('/login')} type="secondary">
+                                Get Started
+                            </CustomBtn>
+                        </Col>
+                    </Row>
+                </>
+            )}
         </LandingPageStyles>
     );
 };

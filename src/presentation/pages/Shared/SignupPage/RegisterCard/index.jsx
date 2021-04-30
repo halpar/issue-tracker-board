@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import { message, Row } from 'antd';
 import Provider from '../../../../components/AuthProvider';
+import DefaultIMG from '../../../../../assets/common/login/profile.svg';
+import { FirebaseContext } from '../../../../../utils/Context';
 
 import RegisterCardStyles, {
     Title,
@@ -20,11 +22,30 @@ import RegisterCardStyles, {
 import whiteArrow from '../../../../../assets/common/login/white-arrow.svg';
 
 const RegisterCard = ({ setShowEmailLogin, showEmailLogin, history }) => {
+    const { firebase } = useContext(FirebaseContext);
     const [subscribe, setSubscribe] = useState(true);
-    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [showErrorMessage] = useState(false);
 
-    const handleLogin = (vals) => {
-        const { email, password } = vals;
+    const handleSignUp = (vals) => {
+        const { email, password, name } = vals;
+
+        firebase
+            .auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then((result) => {
+                result.user
+                    .updateProfile({
+                        displayName: name,
+                        photoURL: DefaultIMG,
+                    })
+                    .then(() => {
+                        localStorage.setItem('authUser', JSON.stringify(result));
+                        history.push('/customer');
+                    });
+            })
+            .catch((error) => {
+                message.error(error.message);
+            });
     };
 
     return (
@@ -41,7 +62,10 @@ const RegisterCard = ({ setShowEmailLogin, showEmailLogin, history }) => {
                 </SignupButton>
             </Content>
             {showEmailLogin ? (
-                <Form onFinish={handleLogin}>
+                <Form onFinish={handleSignUp}>
+                    <Form.Item name="name" rules={[{ required: true, message: 'Please enter your name.' }]}>
+                        <Input placeholder="Name" />
+                    </Form.Item>
                     <Form.Item name="email" rules={[{ required: true, message: 'Please enter your e-mail.' }]}>
                         <EmailInput placeholder="E-mail" type="email" />
                     </Form.Item>
@@ -62,7 +86,7 @@ const RegisterCard = ({ setShowEmailLogin, showEmailLogin, history }) => {
                     </ContinueButton>
                 </Form>
             ) : (
-                <Form onFinish={handleLogin}>
+                <Form onFinish={handleSignUp}>
                     <Form.Item rules={[{ required: true, message: 'LPlease enter your phone number.' }]}>
                         <Input type="tel" placeholder="Phone number" />
                     </Form.Item>

@@ -8,7 +8,6 @@ import StyledFooter, {
     FooterBadgeWrapper,
     FooterNavItemStyles,
     IconWrapperCircle,
-    Icon,
     FooterCollapse,
     FooterCollapseWrapper,
 } from './styles';
@@ -111,7 +110,7 @@ const dummyData = [
     },
 ];
 
-const FooterNavItem = ({ itemId, title, datas }) => {
+const FooterNavItem = ({ title, datas }) => {
     const history = useHistory();
 
     return (
@@ -140,8 +139,8 @@ const FooterCollapseItem = ({ itemId, title, datas }) => {
             expandIconPosition="right"
             bordered={false}>
             <Panel header={<Text weight="bold">{title}</Text>} key={itemId}>
-                {datas.map(({ id, name, path }) => (
-                    <Row>
+                {datas.map(({ name, path }, i) => (
+                    <Row key={i}>
                         <Text onClick={() => history.push(path)} style={{ cursor: 'pointer' }}>
                             {name}
                         </Text>

@@ -1,7 +1,7 @@
 /* eslint-disable default-case */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
     MailOutlined,
     CalendarOutlined,
@@ -11,7 +11,7 @@ import {
     ExclamationCircleOutlined,
     PlusCircleOutlined,
 } from '@ant-design/icons';
-import { Menu, Modal, message, Row } from 'antd';
+import { Menu, Modal, message } from 'antd';
 import SiderStyles from './styles';
 import { useSelectedProjectValue, useProjectsValue } from '../../../../utils/Context';
 import { firebase } from '../../../../firebase';
@@ -41,9 +41,10 @@ const siderData = [
 const Sider = () => {
     const history = useHistory();
     const isCollapsed = useSelector((state) => state.sidebarStateStore.isCollapsed);
-    const { selectedProject, setSelectedProject } = useSelectedProjectValue();
+    const { setSelectedProject } = useSelectedProjectValue();
     const { projects, setProjects } = useProjectsValue();
     const [showModal, setShowModal] = useState(false);
+    const [reRender, setRerender] = useState(0);
 
     const handleDeleteProject = (projectObj) => {
         try {
@@ -75,7 +76,6 @@ const Sider = () => {
 
     const handleMenuSubItemClick = (projectObj) => {
         setSelectedProject(projectObj.projectId);
-        console.log(projectObj, 'whats');
         history.push(`/customer/project-details/${projectObj.projectId}`);
     };
 
@@ -98,6 +98,13 @@ const Sider = () => {
     const handleCancelModal = () => {
         setShowModal(false);
     };
+
+    useEffect(() => {
+        if (reRender < 1) {
+            setProjects([]);
+            setRerender(reRender + 1);
+        }
+    }, [reRender]);
 
     return (
         <SiderStyles width="300px" collapsed={isCollapsed}>

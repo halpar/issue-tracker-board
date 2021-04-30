@@ -1,7 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { useEffect, useState } from 'react';
 import moment from 'moment';
-import { useTranslation } from 'react-i18next';
 import { firebase } from '../../firebase';
 import { collatedTasksExist } from '../Helpers';
 
@@ -9,9 +8,10 @@ import { collatedTasksExist } from '../Helpers';
 export const useTasks = (selectedProject) => {
     const [tasks, setTasks] = useState([]);
     const [archivedTasks, setArchivedTasks] = useState([]);
+    const userInfo = JSON.parse(localStorage.getItem('authUser'));
 
     useEffect(() => {
-        let unsubscribe = firebase.firestore().collection('tasks').where('userId', '==', 'V3pZBCaVi8YBvIlXR4zB');
+        let unsubscribe = firebase.firestore().collection('tasks').where('userId', '==', `${userInfo.user.uid}`);
 
         unsubscribe =
             selectedProject && !collatedTasksExist(selectedProject)
@@ -46,24 +46,27 @@ export const useTasks = (selectedProject) => {
 
 export const useProjects = () => {
     const [projects, setProjects] = useState([]);
+    const userInfo = JSON.parse(localStorage.getItem('authUser'));
 
     useEffect(() => {
-        firebase
-            .firestore()
-            .collection('projects')
-            .where('userId', '==', 'V3pZBCaVi8YBvIlXR4zB')
-            .orderBy('projectId')
-            .get()
-            .then((snapshot) => {
-                const allProjects = snapshot.docs.map((project) => ({
-                    ...project.data(),
-                    docId: project.id,
-                }));
+        if (userInfo) {
+            firebase
+                .firestore()
+                .collection('projects')
+                .where('userId', '==', `${userInfo.user.uid}`)
+                .orderBy('projectId')
+                .get()
+                .then((snapshot) => {
+                    const allProjects = snapshot.docs.map((project) => ({
+                        ...project.data(),
+                        docId: project.id,
+                    }));
 
-                if (JSON.stringify(allProjects) !== JSON.stringify(projects)) {
-                    setProjects(allProjects);
-                }
-            });
+                    if (JSON.stringify(allProjects) !== JSON.stringify(projects)) {
+                        setProjects(allProjects);
+                    }
+                });
+        }
     }, [projects]);
     return { projects, setProjects };
 };

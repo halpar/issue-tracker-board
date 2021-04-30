@@ -8,9 +8,9 @@ import { generatePushId } from '../../../utils/Helpers';
 import { useSelectedProjectValue, useProjectsValue } from '../../../utils/Context';
 
 const AddProjectModal = (props) => {
-    const { visible, onCancel, handleCancelCalled, setIsModalVisible } = props;
     const [form] = Form.useForm();
-    const { projects, setProjects } = useProjectsValue();
+    const { setProjects } = useProjectsValue();
+    const userInfo = JSON.parse(localStorage.getItem('authUser'));
 
     const validateMessages = {
         required: '${label} is required!',
@@ -23,12 +23,11 @@ const AddProjectModal = (props) => {
     );
 
     const handleAddProjectSubmit = (values) => {
-        console.log(values, 'hellosubmit');
         const projectId = generatePushId();
         const projectObjWillbeCreated = {
             projectId,
             name: values.projectName,
-            userId: 'V3pZBCaVi8YBvIlXR4zB',
+            userId: userInfo.user.uid,
         };
         try {
             firebase

@@ -1,6 +1,6 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import { between } from 'polished';
-import { Row, Col, Input } from 'antd';
+import { Col, Input } from 'antd';
 
 import Layout from '../index';
 
@@ -67,6 +67,13 @@ export const CustomerHeader = styled(Header)`
     }
     .icon-margin-left {
         margin-left: 12px;
+    }
+    .flex-it {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        height: 44px !important;
     }
 `;
 
