@@ -3,12 +3,12 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 const firebaseConfig = firebase.initializeApp({
-    apiKey: 'AIzaSyB_79rGMlKKXARf81YRPwjVE-3K4xd832g',
-    authDomain: 'issue-tracker-board.firebaseapp.com',
-    projectId: 'issue-tracker-board',
-    storageBucket: 'issue-tracker-board.appspot.com',
-    messagingSenderId: '866883165105',
-    appId: '1:866883165105:web:1e00b2c0b3f90e212a7b90',
+    apiKey: 'apikeyhere',
+    authDomain: '',
+    projectId: '',
+    storageBucket: '',
+    messagingSenderId: '',
+    appId: '',
 });
 
 export { firebaseConfig as firebase };
